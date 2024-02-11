@@ -13,9 +13,10 @@
     <div class="container-fluid">
 		<h1>Temperature conversion</h1>
 		<img src="images/temperature.gif" class="img-fluid" alt="runner logo" width="150" height="150"><br>
+		<hr/>
 		<form role="form" method="GET">
 		  <div class="form-group">
-			<label for="tem">Current temperature:</label>
+			<label for="tem">Current temperature:(Celsius)</label>
 			<input type="text" class="form-control" name="temp" id="temp" value="20">
 		  </div><br>
 		  <div class="form-group">
@@ -33,41 +34,47 @@
 	</div>
 	
 	<script>
-		function conversion(u,t){
-			if(isNaN(t)){
-					msg = "Please verify whether the temperature value is correct!!!";
-					alert(msg);
-					return;
-			   }
-			   if(!(t >= -100 && t <= 100)){
-					msg = "Tempurature entered (in Celsius) must be between 0 and 100 C'";
-					alert(msg);
-					return;
-			   }
-		}
-	    $(document).ready(function(){
-			$("button").click(function(){
-			   var t = $('#temp').val();//celsius
-			   var u = $('#unit').val();
-			   
-			   
-			   var t1;
-			   var u1;
-			   
-			   if(u == "F"){
-					t1 = t * (9/5) + 32;
-					u1 = "Fahrenheit";
-			   }else if(u == "K"){
-					t1 =  t + 273.15;
-					u1 = "Réaumur";
-			   }else if(u == "R"){
-					t1 = t * (4/5);
-					u1 = "Kelvin";
-			   }
-			   
-			   alert("Temperature is "+t1+" in "+u1);
-			});
-		});
-	</script>
+        function validate(t){
+            if(isNaN(t)){
+                 msg = "Please verify whether the temperature value is correct!!!";
+                 alert(msg);
+                 return;
+            }
+            if(!(t >= -100 && t <= 100)){
+                 msg = "Tempurature entered (in Celsius) must be between 0 and 100 C'";
+                 alert(msg);
+                 return;
+            }
+
+        }
+        function conversion(u,t){
+            var t1;
+            var u1;
+
+            if(u == "F"){
+                 t1 = t * (9/5) + 32;
+                 u1 = "Fahrenheit";
+            }else if(u == "K"){
+                 t1 =  t + 273.15;
+                 u1 = "Réaumur";
+            }else if(u == "R"){
+                 t1 = t * (4/5);
+                 u1 = "Kelvin";
+            }
+            return {u1,t1};
+        }
+        $(document).ready(function(){
+            $("button").click(function(){
+               var t = $('#temp').val();//celsius
+               var u = $('#unit').val();
+
+               var chk = validate(t);
+               if (chk != null) return chk;
+               var cvs = conversion(u,t);
+
+               document.getElementById("result").innerHTML = ("Temperature is "+cvs.t1+" in "+cvs.u1);
+            });
+        });
+    </script>
 </body>
 </html>
